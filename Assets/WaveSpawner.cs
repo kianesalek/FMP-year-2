@@ -25,7 +25,10 @@ public class WaveSpawner : MonoBehaviour
         GenerateWave();
     }
 
-    // Update is called once per frame
+   
+
+
+
     void FixedUpdate()
     {
         if (spawnTimer <= 0)
@@ -34,6 +37,7 @@ public class WaveSpawner : MonoBehaviour
             if (enemiesToSpawn.Count > 0)
             {
                 GameObject enemy = (GameObject)Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity);
+                enemy.active = true;
                 enemiesToSpawn.RemoveAt(0);
                 spawnedEnemies.Add(enemy);
                 spawnTimer = spawnInterval;
@@ -80,7 +84,7 @@ public class WaveSpawner : MonoBehaviour
         List<GameObject> generatedEnemies = new List<GameObject>();
         while (waveValue > 0 || generatedEnemies.Count < 50)
         {
-            int randEnemyId = Random.Range(0, enemies.Count);
+            int randEnemyId = Random.Range(0, enemies.Count-1);
             int randEnemyCost = enemies[randEnemyId].cost;
 
             if (waveValue - randEnemyCost >= 0)

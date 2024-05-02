@@ -594,7 +594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies:
   - enemyPrefab: {fileID: 5976230354768327040}
-    cost: 1
+    cost: 3
   currWave: 1
   enemiesToSpawn:
   - {fileID: 5976230354768327040}
@@ -603,8 +603,8 @@ MonoBehaviour:
   - {fileID: 678705989}
   - {fileID: 1334976959}
   - {fileID: 26225794}
-  spawnIndex: 0
-  waveDuration: 3
+  spawnIndex: 3
+  waveDuration: 10
   spawnedEnemies: []
 --- !u!4 &185516437
 Transform:

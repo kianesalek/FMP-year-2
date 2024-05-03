@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using TMPro; // Import the Text Mesh Pro namespace
 
 public class WaveSpawner : MonoBehaviour
 {
-
     public List<Enemy> enemies = new List<Enemy>();
     public int currWave;
     private int waveValue;
@@ -19,41 +20,35 @@ public class WaveSpawner : MonoBehaviour
     private float spawnTimer;
 
     public List<GameObject> spawnedEnemies = new List<GameObject>();
+
+    // Reference to the Text Mesh Pro UGUI component
+    public TMP_Text waveText;
+
     // Start is called before the first frame update
     void Start()
     {
         GenerateWave();
+        UpdateWaveText(); // Initial update
     }
-
-   
-
-
 
     void FixedUpdate()
     {
         if (spawnTimer <= 0)
         {
-            //spawn an enemy
+            // Spawn an enemy
             if (enemiesToSpawn.Count > 0)
             {
-                GameObject enemy = (GameObject)Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity);
-                enemy.active = true;
+                GameObject enemy = Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity);
+                enemy.SetActive(true);
                 enemiesToSpawn.RemoveAt(0);
                 spawnedEnemies.Add(enemy);
                 spawnTimer = spawnInterval;
 
-                if (spawnIndex + 1 <= spawnLocation.Length - 1)
-                {
-                    spawnIndex++;
-                }
-                else
-                {
-                    spawnIndex = 0;
-                }
+                spawnIndex = (spawnIndex + 1) % spawnLocation.Length;
             }
             else
             {
-                waveTimer = 0; 
+                waveTimer = 0;
             }
         }
         else
@@ -66,30 +61,35 @@ public class WaveSpawner : MonoBehaviour
         {
             currWave++;
             GenerateWave();
+            UpdateWaveText(); // Update text when a new wave starts
         }
     }
 
     public void GenerateWave()
     {
-        waveValue = currWave * 10;
-        GenerateEnemies();
 
-        spawnInterval = waveDuration / enemiesToSpawn.Count; 
-        waveTimer = waveDuration; 
+        waveValue = currWave * 10;
+
+        GenerateEnemies();
+        spawnInterval = 2.0f; 
+        waveTimer = waveDuration;
     }
+
 
     public void GenerateEnemies()
     {
-
         List<GameObject> generatedEnemies = new List<GameObject>();
         while (waveValue > 0 || generatedEnemies.Count < 50)
         {
-            int randEnemyId = Random.Range(0, enemies.Count-1);
-            int randEnemyCost = enemies[randEnemyId].cost;
+            var validEnemies = enemies.FindAll(e => e.cost <= waveValue).ToList();
+            if (validEnemies.Count == 0)
+                break;
+            int randEnemyId = Random.Range(0, validEnemies.Count);
+            int randEnemyCost = validEnemies[randEnemyId].cost;
 
             if (waveValue - randEnemyCost >= 0)
             {
-                generatedEnemies.Add(enemies[randEnemyId].enemyPrefab);
+                generatedEnemies.Add(validEnemies[randEnemyId].enemyPrefab);
                 waveValue -= randEnemyCost;
             }
             else if (waveValue <= 0)
@@ -101,6 +101,11 @@ public class WaveSpawner : MonoBehaviour
         enemiesToSpawn = generatedEnemies;
     }
 
+    // Method to update the wave text with the current wave number
+    void UpdateWaveText()
+    {
+        waveText.text = "Wave count is " + currWave;
+    }
 }
 
 [System.Serializable]

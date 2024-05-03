@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Zombies
   - WaveSpawner
+  - Lava
   layers:
   - Default
   - TransparentFX

@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float life = 3;
+    public float life = 3f;
 
-
-    void Awake()
+    void Start()
     {
-        Destroy(gameObject, life);
+        // Destroy the bullet after its lifetime adjusted for the time scale
+        Destroy(gameObject, life / Time.timeScale);
     }
 
     void OnTriggerEnter(Collider other)
     {
-     
         if (other.gameObject.CompareTag("Zombies"))
         {
+            // Destroy the zombie and the bullet
             Destroy(other.gameObject);
-          
             Destroy(gameObject);
         }
-       
     }
-
 }

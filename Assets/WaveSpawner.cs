@@ -21,21 +21,20 @@ public class WaveSpawner : MonoBehaviour
 
     public List<GameObject> spawnedEnemies = new List<GameObject>();
 
-    // Reference to the Text Mesh Pro UGUI component
     public TMP_Text waveText;
+    public AudioSource audioSource; // Add this line to declare an AudioSource
+    public AudioClip waveChangeAudioClip; // Add this line to declare an AudioClip
 
-    // Start is called before the first frame update
     void Start()
     {
         GenerateWave();
-        UpdateWaveText(); // Initial update
+        UpdateWaveText();
     }
 
     void FixedUpdate()
     {
         if (spawnTimer <= 0)
         {
-            // Spawn an enemy
             if (enemiesToSpawn.Count > 0)
             {
                 GameObject enemy = Instantiate(enemiesToSpawn[0], spawnLocation[spawnIndex].position, Quaternion.identity);
@@ -61,20 +60,19 @@ public class WaveSpawner : MonoBehaviour
         {
             currWave++;
             GenerateWave();
-            UpdateWaveText(); // Update text when a new wave starts
+            UpdateWaveText();
+            PlayWaveChangeAudio(); // Play the audio clip when a new wave starts
         }
     }
 
     public void GenerateWave()
     {
-
         waveValue = currWave * 10;
 
         GenerateEnemies();
-        spawnInterval = 2.0f; 
+        spawnInterval = 2.0f;
         waveTimer = waveDuration;
     }
-
 
     public void GenerateEnemies()
     {
@@ -101,10 +99,14 @@ public class WaveSpawner : MonoBehaviour
         enemiesToSpawn = generatedEnemies;
     }
 
-    // Method to update the wave text with the current wave number
     void UpdateWaveText()
     {
         waveText.text = "Wave count is " + currWave;
+    }
+
+    void PlayWaveChangeAudio()
+    {
+        audioSource.PlayOneShot(waveChangeAudioClip);
     }
 }
 
@@ -113,4 +115,5 @@ public class Enemy
 {
     public GameObject enemyPrefab;
     public int cost;
+
 }

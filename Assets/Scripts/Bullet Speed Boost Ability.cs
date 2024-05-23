@@ -21,7 +21,7 @@ public class BulletSpeedBoostAbility : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !abilityOnCooldown && waveSpawner.currWave >= 1)
+        if (Input.GetKeyDown(KeyCode.E) && !abilityOnCooldown && waveSpawner.currWave >= 10)
         {
             StartCoroutine(ActivateAbility());
         }

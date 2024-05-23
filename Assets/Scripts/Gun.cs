@@ -5,9 +5,18 @@ public class Gun : MonoBehaviour
     public Transform bulletSpawnPoint;
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
-    private const float bulletCooldown = 0.2f;
+    public float bulletDelay = 0.2f; // Added field for bullet delay
+    public float originalBulletSpeed;
+    public float originalBulletDelay;
     private float cooldownTimer = 0f;
     public AudioSource audioSource;
+
+    void Start()
+    {
+        // Store the original values at the start
+        originalBulletSpeed = bulletSpeed;
+        originalBulletDelay = bulletDelay;
+    }
 
     void FixedUpdate()
     {
@@ -16,7 +25,7 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (cooldownTimer >= bulletCooldown)
+            if (cooldownTimer >= bulletDelay) // Use bulletDelay instead of a hardcoded value
             {
                 // Instantiate a bullet
                 var bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);

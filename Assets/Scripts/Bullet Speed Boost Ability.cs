@@ -16,13 +16,12 @@ public class BulletSpeedBoostAbility : MonoBehaviour
     public AudioSource abilityAudioSource;
     public GameObject activationEffect;
 
-
     public Gun gunScript;
     public WaveSpawner waveSpawner; // Reference to the WaveSpawner script
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !abilityOnCooldown && waveSpawner.currWave >= 10)
+        if (Input.GetKeyDown(KeyCode.E) && !abilityOnCooldown && waveSpawner.currWave >= 1)
         {
             StartCoroutine(ActivateAbility());
         }
